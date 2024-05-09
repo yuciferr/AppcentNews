@@ -1,11 +1,13 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.example.appcentnews"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.appcentnews"
@@ -30,11 +32,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+    }
+    kotlin{
+        jvmToolchain {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
     }
     buildFeatures {
         compose = true
@@ -66,4 +73,37 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Hilt Dagger
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    //Retrofit https://square.github.io/retrofit/ - latest vesion https://github.com/square/retrofit.
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    //Gson -> json data to java or kotlin format
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    //coroutines -> https://github.com/Kotlin/kotlinx.coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    //Viewmodel and livedata -> https://developer.android.com/jetpack/androidx/releases/lifecycle
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    // LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    // Annotation processor
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    kapt("androidx.lifecycle:lifecycle-compiler:2.7.0")
+    // login intercept
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+
+    // Room DB
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    androidTestImplementation("androidx.room:room-testing:2.6.1")
 }
