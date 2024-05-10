@@ -11,32 +11,46 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.example.appcentnews.navigation.Screens
 
 @Composable
-fun BottomBar(selectedItem: MutableState<Int>, navController: NavController? = null) {
+fun BottomBar(navController: NavController? = null) {
     BottomAppBar(
         containerColor = Color(0xFFFAFAFA)
     ) {
         NavigationBarItem(
-            label = { Text("Home") },
-            selected = selectedItem.value == 0,
+            label = {
+                Text(
+                    text = "Favorites",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        lineHeight = 14.sp,
+                        letterSpacing = 0.sp
+                    )
+                )
+            },
+            selected = navController?.currentDestination?.route == Screens.NewsScreen.route,
             onClick = {
-                selectedItem.value = 0
-                navController?.navigate(Screens.NewsScreen.route)
+                if (navController?.currentDestination?.route != Screens.NewsScreen.route) {
+                    navController?.navigate(Screens.NewsScreen.route) {
+                        popUpTo(Screens.NewsScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }
             },
             icon = {
                 Icon(
-                    imageVector = if (selectedItem.value == 0) Icons.Filled.Home else Icons.Outlined.Home,
+                    imageVector = if (navController?.currentDestination?.route == Screens.NewsScreen.route) Icons.Filled.Home else Icons.Outlined.Home,
                     contentDescription = "Home",
-                    tint = if (selectedItem.value == 0) Color.White else Color.LightGray
+                    tint = if (navController?.currentDestination?.route == Screens.NewsScreen.route) Color.White else Color.LightGray
                 )
             },
             colors = NavigationBarItemDefaults.colors(
@@ -47,17 +61,32 @@ fun BottomBar(selectedItem: MutableState<Int>, navController: NavController? = n
             )
         )
         NavigationBarItem(
-            label = { Text("Favorites") },
-            selected = selectedItem.value == 1,
+            label = {
+                Text(
+                    text = "Favorites",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        lineHeight = 14.sp,
+                        letterSpacing = 0.sp
+                    )
+                )
+            },
+            selected = navController?.currentDestination?.route == Screens.FavoriteScreen.route,
             onClick = {
-                selectedItem.value = 1
-                navController?.navigate(Screens.FavoriteScreen.route)
+                if (navController?.currentDestination?.route != Screens.FavoriteScreen.route) {
+                    navController?.navigate(Screens.FavoriteScreen.route) {
+                        popUpTo(Screens.FavoriteScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }
             },
             icon = {
                 Icon(
-                    imageVector = if (selectedItem.value == 1) Icons.Filled.Favorite else Icons.Outlined.Favorite,
+                    imageVector = if (navController?.currentDestination?.route == Screens.FavoriteScreen.route) Icons.Filled.Favorite else Icons.Outlined.Favorite,
                     contentDescription = "Favorites",
-                    tint = if (selectedItem.value == 1) Color.White else Color.LightGray
+                    tint = if (navController?.currentDestination?.route == Screens.FavoriteScreen.route) Color.White else Color.LightGray
                 )
             },
             colors = NavigationBarItemDefaults.colors(
@@ -73,6 +102,5 @@ fun BottomBar(selectedItem: MutableState<Int>, navController: NavController? = n
 @Preview
 @Composable
 fun BottomBarPreview() {
-    val selectedItem = remember { mutableStateOf(1) }
-    BottomBar(selectedItem = selectedItem)
+    BottomBar()
 }

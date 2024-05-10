@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -30,22 +32,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.appcentnews.R
 import com.example.appcentnews.composables.DetailAppBar
+import com.example.appcentnews.model.Article
 import com.example.appcentnews.ui.theme.NewsReader
 
 @Composable
 fun DetailScreen(
-    title: String,
-    author: String,
-    date: String,
-    imageUrl: String? = null,
-    content: String = "",
+    article: Article,
+    navController: NavController? = null
 ) {
 
     val painter = rememberImagePainter(
-        data = imageUrl,
+        data = article.urlToImage,
         builder = {
             crossfade(true)
             placeholder(R.drawable.placeholder)
@@ -56,25 +57,26 @@ fun DetailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White), verticalArrangement = Arrangement.Top
+            .background(Color.White).verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Top
     )
     {
         DetailAppBar(
             title = "News Detail",
-            onBack = { /*TODO*/ },
+            onBack = { navController?.popBackStack() },
             onFavorite = { /*TODO*/ },
             onShare = { /*TODO*/ },
             isFavorite = false
         )
 
-        if (imageUrl != null) {
+        if (article.urlToImage != null) {
             Image(
                 painter = painter,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(2f)
+                    .height(250.dp)
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -91,7 +93,7 @@ fun DetailScreen(
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = author,
+                text = article.author!!,
                 style = TextStyle(
                     fontFamily = NewsReader,
                     fontWeight = FontWeight.Normal,
@@ -111,7 +113,7 @@ fun DetailScreen(
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = date,
+                text = article.publishedAt!!,
                 style = TextStyle(
                     fontFamily = NewsReader,
                     fontWeight = FontWeight.Normal,
@@ -125,7 +127,7 @@ fun DetailScreen(
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = title,
+            text = article.title!!,
             style = TextStyle(
                 fontFamily = NewsReader,
                 fontWeight = FontWeight.SemiBold,
@@ -136,9 +138,9 @@ fun DetailScreen(
             modifier = Modifier.padding(horizontal = 8.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
-        if (content.isNotEmpty()) {
+        if (article.content?.isNotEmpty() == true) {
             Text(
-                text = content,
+                text = article.content,
                 modifier = Modifier.padding(bottom = 8.dp, start = 8.dp, end = 8.dp)
             )
         }
@@ -185,10 +187,15 @@ fun DetailScreen(
 @Composable
 fun DetailScreenPreview() {
     DetailScreen(
-        title = "Study: The Maya blessed their ball courts in rituals with hallucinogenic plants",
-        author = "John Doe",
-        date = "April 30, 2024",
-        imageUrl = "https://phandroid.com/wp-content/uploads/2024/04/oneplus-watch2-blue.png",
-        content = "Enlarge/ A decorative ring made from carved stone is embedded in the wall of a ballcourt in the ancient Maya city of Chichen Itza.\\r\\n1\\r\\nIt's well-known that the ancient Maya had their own version of b… [+3703 chars]"
+        article = Article(
+            title = "Study: The Maya blessed their ball courts in rituals with hallucinogenic plants",
+            urlToImage = "https://phandroid.com/wp-content/uploads/2024/04/oneplus-watch2-blue.png",
+            description = "eDNA analysis found traces of xtabentum, as well as lancewood, chili peppers, and joolchaje, in the soil of a ball court in Mexico.",
+            author = "John Doe",
+            publishedAt = "April 30, 2024",
+            content = "The Maya civilization was a Mesoamerican civilization developed by the Maya peoples, and noted for its logosyllabic script—the most sophisticated and highly developed writing system in pre-Columbian Americas—as well as for its art, architecture, mathematics, calendar, and astronomical system. The Maya civilization developed in an area that encompasses southeastern Mexico, all of Guatemala and Belize, and the western portions of Honduras and El Salvador. This region consists of the northern lowlands encompassing the Yucatán Peninsula, and the highlands of the Sierra Madre, running from the Mexican state of Chiapas, across southern Guatemala and onwards into El Salvador, and the southern lowlands of the Pacific littoral plain.",
+            url = "https://phandroid.com/wp-content/uploads/2024/04/oneplus-watch2-blue.png",
+            source = null
+        )
     )
 }
