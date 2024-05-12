@@ -7,9 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Share
@@ -67,9 +66,10 @@ fun MainAppBar(
 fun DetailAppBar(
     title: String,
     onBack: () -> Unit,
-    onFavorite: () -> Unit,
-    isFavorite: Boolean,
-    onShare: () -> Unit
+    hideButtons : Boolean = false,
+    onFavorite: () -> Unit = {},
+    isFavorite: Boolean? = false,
+    onShare: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -86,6 +86,7 @@ fun DetailAppBar(
                 modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
             )
         }
+        Spacer(modifier = Modifier.width(24.dp))
         Text(
             text = title,
             style = TextStyle(
@@ -96,32 +97,36 @@ fun DetailAppBar(
                 letterSpacing = 0.sp
             ),
             textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f).padding(vertical = 16.dp)
         )
-        IconButton(onClick = { onShare() }) {
-            Icon(
-                imageVector = Icons.Filled.Share,
-                contentDescription = null,
-                tint = Color.Black,
-                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
-            )
-        }
-        IconButton(onClick = { onFavorite() }) {
-            if (isFavorite) {
+        if(!hideButtons){
+            IconButton(onClick = { onShare() }) {
                 Icon(
-                    imageVector = Icons.Filled.Favorite,
-                    contentDescription = null,
-                    tint = Color.Red,
-                    modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Outlined.Favorite,
+                    imageVector = Icons.Filled.Share,
                     contentDescription = null,
                     tint = Color.Black,
                     modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
                 )
             }
+            IconButton(onClick = { onFavorite() }) {
+                if (isFavorite!!) {
+                    Icon(
+                        imageVector = Icons.Filled.Favorite,
+                        contentDescription = null,
+                        tint = Color.Red,
+                        modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Outlined.Favorite,
+                        contentDescription = null,
+                        tint = Color.Black,
+                        modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
+                    )
+                }
+            }
+        }else {
+            Spacer(modifier = Modifier.width(56.dp))
         }
 
 

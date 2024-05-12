@@ -36,11 +36,16 @@ fun SearchBar(onSearch: (String) -> Unit) {
 
     TextField(
         value = searchText,
-        onValueChange = { searchText = it },
+        onValueChange = {
+            searchText = it
+            if (it.length >= 3) {
+                onSearch(it)
+            }
+        },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 8.dp)
-            .height(50.dp)
+            .height(56.dp)
             .background(color = Color(0xFFFAFAFA), shape = RoundedCornerShape(16.dp))
             .shadow(8.dp),
         placeholder = {
@@ -73,7 +78,9 @@ fun SearchBar(onSearch: (String) -> Unit) {
         ),
         keyboardActions = KeyboardActions(
             onSearch = {
-                onSearch(searchText)
+                if(searchText.isNotBlank()) {
+                    onSearch(searchText)
+                }
             }
         ),
         trailingIcon = {
