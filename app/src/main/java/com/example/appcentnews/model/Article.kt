@@ -4,12 +4,19 @@ package com.example.appcentnews.model
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.navigation.NavType
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
+@Entity(
+    tableName = "articles"
+)
 @Parcelize
 data class Article(
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = null,
     @SerializedName("author")
     val author: String?,
     @SerializedName("content")
