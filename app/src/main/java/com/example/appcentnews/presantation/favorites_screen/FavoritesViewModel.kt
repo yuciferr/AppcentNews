@@ -1,5 +1,6 @@
 package com.example.appcentnews.presantation.favorites_screen
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.appcentnews.model.Article
 import com.example.appcentnews.repository.RoomRepository
@@ -11,8 +12,11 @@ class FavoritesViewModel @Inject constructor(
     private val roomRepository: RoomRepository
 ) : ViewModel() {
 
-    fun getFavoriteArticles(): List<Article?> {
-        return roomRepository.getFavoriteArticles()
+    val articles = MutableLiveData<List<Article?>>()
+
+    suspend fun getFavoriteArticles(): List<Article?> {
+        articles.value = roomRepository.getFavoriteArticles()
+        return articles.value!!
     }
 
     suspend fun addArticle(article: Article) {
