@@ -7,7 +7,7 @@ import javax.inject.Inject
 class RoomRepository @Inject constructor(
     private val articleDao: ArticleDao
 ) {
-    fun getFavoriteArticles(): List<Article?> {
+    suspend fun getFavoriteArticles(): List<Article?> {
         return articleDao.getAllArticles()
     }
 
