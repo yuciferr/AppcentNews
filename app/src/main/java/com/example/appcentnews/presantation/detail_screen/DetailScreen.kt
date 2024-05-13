@@ -1,6 +1,10 @@
 package com.example.appcentnews.presantation.detail_screen
 
+import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,6 +70,9 @@ fun DetailScreen(
     val scope = rememberCoroutineScope()
     var isFavorite by remember { mutableStateOf(false)}
 
+    val context = LocalContext.current
+    val shareIntentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
+
     LaunchedEffect(article){
         scope.launch {
             isFavorite = viewModel.isFavorite(article.title.toString(), article.description.toString())
@@ -89,12 +97,24 @@ fun DetailScreen(
                     scope.launch {
                         if (viewModel.isFavorite(article.title.toString(), article.description.toString())) {
                             viewModel.deleteArticle(article)
+                            isFavorite = viewModel.isFavorite(article.title.toString(), article.description.toString())
+                            Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show()
                         } else {
                             viewModel.addArticle(article)
+                            isFavorite = viewModel.isFavorite(article.title.toString(), article.description.toString())
+                            Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show()
                         }
                     }
                 },
-                onShare = { /*TODO*/ },
+                onShare = {
+                    val sendIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, article.url)
+                        type = "text/plain"
+                    }
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    shareIntentLauncher.launch(shareIntent)
+                },
                 isFavorite = isFavorite
             )
         },
