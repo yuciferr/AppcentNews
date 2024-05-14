@@ -1,7 +1,6 @@
 package com.example.appcentnews.presantation.favorites_screen
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,10 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.appcentnews.R
 import com.example.appcentnews.composables.ArticleItem
 import com.example.appcentnews.composables.MainAppBar
+import com.example.appcentnews.composables.WarningScreen
 import com.example.appcentnews.model.Article
-import com.example.appcentnews.navigation.Screens
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
@@ -62,16 +62,25 @@ fun FavoritesScreen(
                 CircularProgressIndicator()
             }
         } else {
-            LazyColumn {
-                itemsIndexed(articles) { index, article ->
-                    if (article != null) {
-                        ArticleItem(
-                            article = article,
-                            onClick = {
-                                val json = Uri.encode(Gson().toJson(article))
-                                navController?.navigate("detail_screen/$json")
-                            }
-                        )
+            if (articles.isEmpty()) {
+
+                WarningScreen(
+                    image = R.drawable.add_favorite,
+                    message = "You don't have any favorite articles yet"
+                )
+
+            } else {
+                LazyColumn {
+                    itemsIndexed(articles) { index, article ->
+                        if (article != null) {
+                            ArticleItem(
+                                article = article,
+                                onClick = {
+                                    val json = Uri.encode(Gson().toJson(article))
+                                    navController?.navigate("detail_screen/$json")
+                                }
+                            )
+                        }
                     }
                 }
             }
