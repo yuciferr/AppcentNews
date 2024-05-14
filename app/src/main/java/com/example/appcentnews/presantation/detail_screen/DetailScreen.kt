@@ -96,12 +96,17 @@ fun DetailScreen(
                 onFavorite = {
                     scope.launch {
                         if (viewModel.isFavorite(article.title.toString(), article.description.toString())) {
-                            viewModel.deleteArticle(article)
-                            isFavorite = viewModel.isFavorite(article.title.toString(), article.description.toString())
+                            scope.launch {
+                                viewModel.deleteArticle(article)
+                                isFavorite = viewModel.isFavorite(article.title.toString(), article.description.toString())
+                            }
+
                             Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show()
                         } else {
-                            viewModel.addArticle(article)
-                            isFavorite = viewModel.isFavorite(article.title.toString(), article.description.toString())
+                            scope.launch {
+                                viewModel.addArticle(article)
+                                isFavorite = viewModel.isFavorite(article.title.toString(), article.description.toString())
+                            }
                             Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show()
                         }
                     }

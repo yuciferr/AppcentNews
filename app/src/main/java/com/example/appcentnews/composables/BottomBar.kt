@@ -27,7 +27,7 @@ fun BottomBar(navController: NavController? = null) {
         NavigationBarItem(
             label = {
                 Text(
-                    text = "Favorites",
+                    text = "News",
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,

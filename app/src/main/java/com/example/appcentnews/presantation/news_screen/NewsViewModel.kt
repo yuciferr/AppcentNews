@@ -9,6 +9,7 @@ import com.example.appcentnews.model.Article
 import com.example.appcentnews.model.NewsResponse
 import com.example.appcentnews.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,8 +39,9 @@ class NewsViewModel @Inject constructor(
             val response = newsRepository.searchForNews(searchQuery, pageNumber)
             if (response.isSuccessful) {
                 newsResponse.value = response.body()
+                delay(500)
                 articles.value += newsResponse.value?.articles!!
-                filterRemovedArticles()
+                //filterRemovedArticles()
             }
         }
     }

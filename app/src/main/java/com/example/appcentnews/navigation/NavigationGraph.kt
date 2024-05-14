@@ -36,7 +36,7 @@ fun NavigationGraph(
     val newsViewModel : NewsViewModel = hiltViewModel()
     val favoritesViewModel : FavoritesViewModel = hiltViewModel()
 
-    NavHost(navController = navController, startDestination = Screens.FavoriteScreen.route) {
+    NavHost(navController = navController, startDestination = Screens.NewsScreen.route) {
 
         composable(Screens.NewsScreen.route) {
             Scaffold(

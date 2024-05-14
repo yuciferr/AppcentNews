@@ -126,7 +126,7 @@ fun DetailAppBar(
                 }
             }
         }else {
-            Spacer(modifier = Modifier.width(56.dp))
+            Spacer(modifier = Modifier.width(80.dp))
         }
 
 
